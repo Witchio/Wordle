@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+  xmlns:ui="http://java.sun.com/jsf/facelets" xml:lang="en">
+
+<h:head>
+  <title>Wordle Game</title>
+  <h:outputStylesheet library="css" name="default.css" />
+  <h:outputScript name="js/autotab.js" target="head" />
+
+</h:head>
+<h:body>
+  <h1>Wordle Game</h1>
+
+  <div>
+    <h:form>
+      <table>
+        <ui:repeat var="row" value="${wordleGame.guessedLetters}">
+          <tr>
+            <ui:repeat var="letterColor" value="#{row}">
+              <td>
+                <h:inputText value="${letterColor.letter}" styleClass="${letterColor.color}" readonly="true"
+                  maxlength="1" size="1" />
+              </td>
+            </ui:repeat>
+          </tr>
+        </ui:repeat>
+      </table>
+    </h:form>
+
+    <h:form id="letterForm" rendered="${!wordleGame.isGameOver}">
+      <table>
+        <tr>
+          <ui:repeat value="#{wordleGame.letters}" varStatus="status">
+            <td>
+              <h:inputText value="#{wordleGame.letters[status.index]}" maxlength="1" size="1"
+                id="letter_#{status.index}" class="letterInput" />
+            </td>
+          </ui:repeat>
+        </tr>
+      </table>
+      <div class="buttonContainer">
+        <h:commandButton id="submitBtn" value="Submit" action="#{wordleGame.chooseAction}"
+          rendered="${!wordleGame.isGameOver || !wordleGame.isWordFound}" />
+      </div>
+    </h:form>
+    <div class="gameFinished">
+      <h:outputText value="You lost the game! The right answer was ${wordleGame.secretWord}"
+        rendered="${wordleGame.isLost}" />
+      <h:outputText value="Congratulations, you won the game!" rendered="${wordleGame.isWin}" />
+    </div>
+    <div class="buttonContainer">
+      <h:form>
+
+        <h:commandButton value="Replay" action="#{wordleGame.restartGame}" rendered="${wordleGame.isGameOver}" />
+      </h:form>
+    </div>
+
+    <h:messages class="error" />
+
+  </div>
+
+</h:body>
+
+</html>
