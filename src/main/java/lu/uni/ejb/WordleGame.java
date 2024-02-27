@@ -1,12 +1,9 @@
 package lu.uni.ejb;
 
-import jakarta.ejb.EJB;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import java.io.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,8 +11,6 @@ import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @SessionScoped
 @Named("wordleGame")
@@ -23,7 +18,6 @@ public class WordleGame implements Serializable {
 
   private String secretWord;
   private List<String> guesses = new ArrayList<>();
-  private List<String> answers = new ArrayList<>();
   private List<String> letters = new ArrayList<>(Collections.nCopies(5, null));
   private List<List<LetterColor>> guessedLetters = new ArrayList<>();
   private boolean isWin = false;
@@ -33,8 +27,6 @@ public class WordleGame implements Serializable {
   public WordleGame() {
     generateSecretWord();
     this.loadGuesses("guesses.txt");
-    System.out.println("Number of total guesses is " + this.guesses.size());
-    System.out.println("Secret word is :" + this.secretWord);
   }
 
   public boolean getIsGameOver() {
@@ -70,7 +62,6 @@ public class WordleGame implements Serializable {
   }
 
   public String chooseAction() {
-    System.out.println("Submit");
     if (validateForm(letters)) {
       compareWithSecretWord(letters);
     }
@@ -79,7 +70,6 @@ public class WordleGame implements Serializable {
   }
 
   public String restartGame() {
-    System.out.println("Restart Game");
     generateSecretWord();
     resetForm();
     return "";
